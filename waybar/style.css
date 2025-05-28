@@ -1,0 +1,106 @@
+* {
+  padding: 2px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: "JetBrainsMono Nerd Font";
+  min-height: 20px;
+  color: #161b22;
+}
+
+window#waybar {
+  background-color: rgba(0, 0, 0, 0);
+  color: #161b22;
+}
+
+window#waybar.hidden {
+  opacity: 0.2;
+}
+
+#workspaces button {
+  padding: 0 6px 0 0;
+  background-color: transparent;
+}
+
+#workspaces button.empty {
+  color: #89929b;
+}
+
+#workspaces button.urgent {
+  color: #fa7970;
+}
+
+#battery,
+#cpu,
+#memory,
+#temperature,
+#backlight,
+#network,
+#bluetooth,
+#pulseaudio,
+#tray,
+#privacy,
+#power-profiles-daemon {
+  padding: 0 10px;
+  background-color: #E0E0E0;
+}
+
+#custom-power {
+  padding-right: 8px;
+}
+#custom-quit, #custom-shutdown, #custom-reboot {
+  padding: 0 23px 0 8px;
+}
+#battery.critical:not(.charging) {
+  border: 2px solid #fa7970;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: steps(12);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes blink {
+  to {
+    border: 2px solid #77bdfb;
+  }
+}
+
+#power-profiles-daemon {
+  padding-right: 18px;
+}
+
+#power-profiles-daemon.performance {
+  padding-right: 13px;
+}
+
+#cpu {
+  padding: 0 15px 0 10px;
+}
+
+#custom-kb-layout {
+  padding: 0 10px;
+}
+
+#tray>.passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray>.needs-attention {
+  -gtk-icon-effect: highlight;
+}
+
+#GtkSeparatorMenuItem {
+  border-radius: 0px;
+  padding: 0px;
+}
+
+#group-hardware,
+#group-connect,
+#group-others,
+#group-battery,
+#clock,
+#workspaces {
+  background-color: #E0E0E0;
+  border-radius: 20px;
+  padding: 0 12px;
+}
