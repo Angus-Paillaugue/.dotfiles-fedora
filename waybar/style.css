@@ -37,7 +37,6 @@ window#waybar.hidden {
 #network,
 #bluetooth,
 #pulseaudio,
-#tray,
 #privacy,
 #power-profiles-daemon {
   padding: 0 10px;
@@ -103,4 +102,14 @@ window#waybar.hidden {
   background-color: #E0E0E0;
   border-radius: 20px;
   padding: 0 12px;
+}
+tooltip {
+  color: #161b22;
+  background-color: #E0E0E0;
+  text-shadow: none;
+}
+
+tooltip * {
+  color: #161b22;
+  text-shadow: none;
 }

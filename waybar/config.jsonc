@@ -10,10 +10,11 @@
         "hyprland/workspaces"
     ],
     "modules-right": [
+        "group/group-others",
         "group/group-connect",
         "group/group-battery"
     ],
-    "group/others": {
+    "group/group-others": {
         "orientation": "inherit",
         "spacing": 5,
         "modules": [
@@ -107,10 +108,18 @@
         "spacing": 10
     },
     "clock": {
-        "format": "{:%I:%M:%S %p}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%m/%d/%Y}",
-        "interval": 1
+        "format": "{:%H:%M:%S}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%d/%m/%Y}",
+        "interval": 1,
+        "calendar": {
+            "mode": "month"
+        },
+        "actions":  {
+            "on-click-right": "mode",
+            "on-scroll-up": "shift_down",
+            "on-scroll-down": "shift_up"
+        }
     },
     "hyprland/workspaces": {
         "format": "{icon}",
@@ -124,10 +133,12 @@
     },
     "cpu": {
         "format": "{usage}% ",
+        "interval": 3,
         "on-click": "kitty btop"
     },
     "memory": {
         "format": "{}%  ",
+        "interval": 3,
         "on-click": "kitty btop"
     },
     "temperature": {
@@ -135,7 +146,9 @@
         "format": "{temperatureC}°C {icon}",
         "format-icons": ["", "", "󰈸"],
         "tooltip": false,
-        "on-click": "kitty btop"
+        "on-click": "kitty btop",
+        "interval": 3,
+        "hwmon-path": "/sys/class/hwmon/hwmon4/temp1_input"
     },
     "backlight": {
         // "device": "acpi_video1",
