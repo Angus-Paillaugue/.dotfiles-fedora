@@ -1,0 +1,307 @@
+/* Bar button */
+#settings-menu-container {
+  margin: 0;
+  padding: 0;
+}
+#settings-menu-main-button {
+  border-radius: 12px;
+  min-width: 40px;
+  min-height: 40px;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background-color: var(--surface);
+}
+#settings-menu-main-button label {
+  font-size: 24px;
+  color: var(--foreground);
+}
+#settings-menu-main-button:hover,
+#settings-menu-main-button:focus {
+  border-radius: 20px;
+  background-color: var(--surface-bright);
+}
+#settings-menu-main-button:hover label,
+#settings-menu-main-button:focus label {
+  color: var(--primary);
+}
+#settings-menu-main-button:active {
+  border-radius: 12px;
+  background-color: var(--primary);
+}
+#settings-menu-main-button:active label {
+  color: var(--shadow);
+}
+
+
+/* Dropdown */
+#settings-container {
+  background-color: var(--shadow);
+  border: 1px solid var(--surface-bright);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  min-width: 350px;
+}
+
+
+/* WIFI */
+#wifi-button-content, #power-profile, #bluetooth-left-button {
+  padding: 8px;
+  border-radius: 12px;
+  background-color: var(--primary);
+}
+#wifi-icon, #power-profile-icon, #bluetooth-icon {
+  font-size: 25px;
+  color: var(--shadow);
+}
+#wifi-ssid, #power-profile-name, #bluetooth-status {
+  font-size: 14px;
+  color: var(--shadow);
+}
+
+
+/* Bluetooth */
+#bluetooth-left-button {
+  border-radius: 12px 2px 2px 12px;
+}
+#bluetooth-left-button.disabled {
+  background-color: var(--surface);
+}
+#bluetooth-left-button.disabled #bluetooth-left-button-childs label {
+  color: var(--foreground);
+}
+#bluetooth-open-button {
+  border-radius: 2px 12px 12px 2px;
+  background-color: var(--surface);
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#bluetooth-open-button label {
+  font-size: 20px;
+  color: var(--foreground);
+  transition: all 0.25s ease;
+}
+#bluetooth-open-button:hover {
+  background-color: var(--primary);
+  padding: 0 4px;
+}
+#bluetooth-open-button:hover label {
+  color: var(--shadow);
+}
+#bluetooth-devices-title {
+  font-size: 16px;
+  color: var(--foreground);
+}
+#bluetooth-devices-container {
+  margin-top: 12px;
+  background-color: var(--surface);
+  border-radius: 8px;
+  padding: 8px
+}
+#bluetooth-scan {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: var(--surface-bright);
+  transition: all 0.1s ease;
+}
+#bluetooth-scan:hover {
+  border-radius: 20px;
+  background-color: var(--primary);
+}
+#bluetooth-scan:hover label {
+  color: var(--on-primary);
+}
+#bluetooth-scan label {
+  color: var(--foreground);
+  font-size: 18px;
+  transition: all 0.1s ease;
+}
+#bluetooth-scan label.scanning {
+  color: var(--on-primary);
+}
+#bluetooth-scan label.scanning #bluetooth-scan {
+  background-color: var(--primary);
+}
+
+/* Network */
+#network-icon-label {
+  color: var(--foreground);
+  font-size: 20px;
+  padding: 4px;
+  border-radius: 11px;
+  transition: all 0.1s ease;
+}
+
+
+/* Brightness and Volume */
+#brightness-icon, #volume-icon {
+  font-size: 24px;
+  color: var(--foreground);
+}
+#brightness-row, #volume-row {
+  margin-top: 20px;
+}
+
+
+/* Battery */
+#battery-container {
+  padding: 8px;
+  background-color: var(--surface);
+  border-radius: 12px;
+}
+#battery-circle {
+  color: var(--surface-bright);
+  border: 3px solid var(--primary);
+}
+#battery-circle.bat {
+  border: 3px solid var(--green);
+}
+#battery-circle.alert {
+  border: 3px solid var(--red-dim);
+}
+#battery-icon {
+  font-size: 20px;
+}
+#battery-icon.alert {
+  color: var(--red-dim);
+}
+#battery-level {
+  font-weight: bold;
+  margin: 0 4px 0 8px;
+}
+
+
+/* Power profile */
+/* #power-profile.powersave {
+  background-color: var(--green);
+}
+#power-profile.powersave label {
+  color: var(--surface);
+} */
+
+
+/* Power menu */
+#power-options-container {
+  margin-top: 12px;
+}
+
+#power-menu-main-button {
+  border-radius: 12px;
+  min-width: 40px;
+  min-height: 40px;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background-color: var(--surface);
+}
+
+#power-menu-main-button label {
+  font-size: 24px;
+  color: var(--foreground);
+}
+
+#power-menu-main-button:hover,
+#power-menu-main-button:focus {
+  border-radius: 20px;
+  background-color: var(--surface-bright);
+}
+
+#power-menu-main-button:hover label,
+#power-menu-main-button:focus label {
+  color: var(--primary);
+}
+
+#power-menu-main-button:active {
+  border-radius: 12px;
+  background-color: var(--primary);
+}
+
+#power-menu-main-button:active label {
+  color: var(--shadow);
+}
+
+/* Power menu dropdown styling */
+#power-menu-dropdown {
+  background-color: var(--shadow);
+  border: 1px solid var(--surface-bright);
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+#power-options-container {
+  min-width: 180px;
+}
+
+#power-option-button {
+  border-radius: 8px;
+  padding: 8px;
+  transition: all 0.2s ease;
+}
+
+#power-option-button:hover {
+  background-color: var(--surface-bright);
+}
+
+#power-option-button:active {
+  background-color: var(--primary);
+}
+
+#option-icon {
+  font-size: 18px;
+  min-width: 24px;
+}
+
+#option-label {
+  font-size: 14px;
+}
+
+#power-option-button:hover #option-icon,
+#power-option-button:hover #option-label {
+  color: var(--primary);
+}
+
+#power-option-button:active #option-icon,
+#power-option-button:active #option-label {
+  color: var(--shadow);
+}
+#setting-buttons-grid {
+  margin-top: 12px;
+}
+
+
+/* Reusable */
+
+/* Slider */
+#control-slider {
+  background-color: var(--surface);
+  margin: 0px 0px 0px 0px;
+  border-radius: 6px 6px 6px 6px;
+}
+#control-slider trough {
+  min-height: 10px;
+  padding-right: 4px;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#control-slider trough highlight {
+  border-radius: 6px 6px 6px 6px;
+  min-height: 10px;
+  margin-right: 8px;
+  background-color: var(--primary);
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#control-slider.muted trough highlight,
+#control-slider.muted slider {
+  background-color: var(--surface-bright);
+}
+/* Slider grab area */
+#control-slider slider {
+  border-radius: 2px;
+  background-color: var(--primary);
+  min-width: 4px;
+  min-height: 40px;
+  margin: -8px 0;
+  box-shadow:
+    -4px 0 0px 2px var(--shadow),
+    4px 0 0px 2px var(--shadow);
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#control-slider slider:hover {
+  background-color: var(--foreground);
+}

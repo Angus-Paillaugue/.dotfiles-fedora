@@ -34,3 +34,6 @@ yelp
 borg
 libreoffice
 obsidian
+Ax-Shell
+__pycache__
+.venv
