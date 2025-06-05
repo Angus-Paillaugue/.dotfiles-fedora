@@ -2,7 +2,7 @@ from typing import Any, List, Literal
 
 import gi
 from fabric.core.service import Property, Service, Signal
-from fabric.utils import bulk_connect, exec_shell_command_async
+from fabric.utils import bulk_connect, exec_shell_command_async, exec_shell_command
 from gi.repository import Gio
 from loguru import logger
 
@@ -218,20 +218,6 @@ class Ethernet(Service):
             "disconnected",
         )
 
-    @Property(str, "readable")
-    def icon_name(self) -> str:
-        network = self.internet
-        if network == "activated":
-            return "network-wired-symbolic"
-
-        elif network == "activating":
-            return "network-wired-acquiring-symbolic"
-
-        elif self._device.get_connectivity != NM.ConnectivityState.FULL:
-            return "network-wired-no-route-symbolic"
-
-        return "network-wired-disconnected-symbolic"
-
     def __init__(self, client: NM.Client, device: NM.DeviceEthernet, **kwargs) -> None:
         super().__init__(**kwargs)
         self._client: NM.Client = client
@@ -239,7 +225,6 @@ class Ethernet(Service):
 
         for pn in (
             "active-connection",
-            "icon-name",
             "internet",
             "speed",
             "state",
@@ -298,26 +283,3 @@ class NetworkClient(Service):
             ),
             None,
         )
-
-    def _get_primary_device(self) -> Literal["wifi", "wired"] | None:
-        if not self._client:
-            return None
-        return (
-            "wifi"
-            if "wireless"
-            in str(self._client.get_primary_connection().get_connection_type())
-            else "wired"
-            if "ethernet"
-            in str(self._client.get_primary_connection().get_connection_type())
-            else None
-        )
-
-    def connect_wifi_bssid(self, bssid):
-        # We are using nmcli here, idk im lazy
-        exec_shell_command_async(
-            f"nmcli device wifi connect {bssid}", lambda *args: print(args)
-        )
-
-    @Property(str, "readable")
-    def primary_device(self) -> Literal["wifi", "wired"] | None:
-        return self._get_primary_device()

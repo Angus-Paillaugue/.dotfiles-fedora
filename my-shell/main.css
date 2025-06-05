@@ -1,12 +1,19 @@
 @import url("./styles/bar.css");
+@import url("./styles/battery.css");
+@import url("./styles/brightness.css");
 @import url("./styles/colors.css");
 @import url("./styles/language.css");
 @import url("./styles/launcher.css");
 @import url("./styles/metrics.css");
 @import url("./styles/power.css");
-@import url("./styles/settings.css");
+@import url("./styles/power-profile.css");
 @import url("./styles/time.css");
+@import url("./styles/settings.css");
 @import url("./styles/tray.css");
+@import url("./styles/volume.css");
+@import url("./styles/wifi.css");
+@import url("./styles/wired.css");
+@import url("./styles/bluetooth.css");
 @import url("./styles/workspace.css");
 
 * {

@@ -109,6 +109,7 @@ class AppLauncher(WaylandWindow):
         self.add(self.launcher_box)
 
     def close_launcher(self):
+        self.search_entry.set_text("")
         self.viewport.children = []
         self.selected_index = -1
         self.hide()

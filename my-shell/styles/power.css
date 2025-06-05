@@ -1,6 +1,5 @@
-#power-menu-container {
-  margin: 0;
-  padding: 0;
+#power-options-container {
+  margin-top: 12px;
 }
 
 #power-menu-main-button {
@@ -80,4 +79,8 @@
 #power-option-button:active #option-icon,
 #power-option-button:active #option-label {
   color: var(--shadow);
+}
+
+#setting-buttons-grid {
+  margin-top: 12px;
 }
