@@ -1,5 +1,5 @@
 #wired-left-button {
-  border-radius: 12px;
+  border-radius: 12px 2px 2px 12px;
 }
 
 #wired-left-button.disabled {

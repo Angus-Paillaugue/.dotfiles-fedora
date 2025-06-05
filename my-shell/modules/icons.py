@@ -57,6 +57,8 @@ cancel: str = "&#xf640;"
 performance: str = "&#x10021;"
 eco: str = "&#xed4f;"
 balanced: str = "&#xebc2;"
+# Others
+screenshot: str = "&#xf201;"
 
 exceptions: list[str] = ['font_family', 'font_weight', 'span']
 

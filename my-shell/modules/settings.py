@@ -13,6 +13,7 @@ from modules.power_profile import PowerProfile
 from modules.volume import VolumeRow, MicRow
 from modules.wifi import WifiModule
 from modules.wired import Wired
+from modules.screenshot import ScreenshotButton
 
 
 class SettingsMenuDropdown(WaylandWindow):
@@ -36,12 +37,14 @@ class SettingsMenuDropdown(WaylandWindow):
         self.bluetooth_devices_dropdown_slot = Box()
         self.wifi_networks_dropdown_slot = Box()
         self.audio_outputs_dropdown_slot = Box()
+        self.wired_networks_dropdown_slot = Box()
         self.mic_module = MicRow()
         self.volume_module = VolumeRow(slot=self.audio_outputs_dropdown_slot)
         self.bluetooth = BluetoothButton(slot=self.bluetooth_devices_dropdown_slot)
         self.power_menu_button = PowerMenuButton(power_actions=self.power_menu_actions)
         self.wifi_module = WifiModule(slot=self.wifi_networks_dropdown_slot)
-        self.network_module = Wired()
+        self.network_module = Wired(slot=self.wired_networks_dropdown_slot)
+        self.screenshot_button = ScreenshotButton()
 
         self.buttons_grid = Gtk.Grid(
             column_homogeneous=True,
@@ -56,13 +59,23 @@ class SettingsMenuDropdown(WaylandWindow):
         self.buttons_grid.attach(self.bluetooth, 0, 1, 1, 1)
         self.buttons_grid.attach(self.power_profile, 1, 1, 1, 1)
 
+        self.end_children = Box(
+            children=[self.screenshot_button, self.power_menu_button],
+            v_align="center",
+            h_align="center",
+            spacing=12,
+        )
+
         self.items = [
             CenterBox(
-                start_children=[self.battery], end_children=[self.power_menu_button]
+                start_children=[self.battery],
+                end_children=self.end_children,
+                orientation="h",
             ),
             self.power_menu_actions,
             self.buttons_grid,
             self.wifi_networks_dropdown_slot,
+            self.wired_networks_dropdown_slot,
             self.bluetooth_devices_dropdown_slot,
             self.volume_module,
             self.audio_outputs_dropdown_slot,

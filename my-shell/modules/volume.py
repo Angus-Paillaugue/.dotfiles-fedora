@@ -218,7 +218,6 @@ class MicRow(Box):
             )
 
     def on_microphone_changed(self, *_):
-        print(self.audio.microphone.application_id)
         if not self.audio.microphone:
             return
         self.value = self.audio.microphone.volume / 100

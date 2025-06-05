@@ -73,9 +73,6 @@ class Wifi(Service):
     def toggle_wifi(self):
         self._client.wireless_set_enabled(not self._client.wireless_get_enabled())
 
-    # def set_active_ap(self, ap):
-    #     self._device.access
-
     def scan(self):
         self._device.request_scan_async(
             None,
@@ -127,17 +124,22 @@ class Wifi(Service):
     def frequency(self):
         return self._ap.get_frequency() if self._ap else -1
 
-    @Property(int, "readable")
+    @Property(str, "readable")
     def internet(self):
-        return {
-            NM.ActiveConnectionState.ACTIVATED: "activated",
-            NM.ActiveConnectionState.ACTIVATING: "activating",
-            NM.ActiveConnectionState.DEACTIVATING: "deactivating",
-            NM.ActiveConnectionState.DEACTIVATED: "deactivated",
-        }.get(
-            self._device.get_active_connection().get_state(),
-            "unknown",
-        )
+        try:
+            if self._device.get_active_connection():
+                return {
+                    NM.ActiveConnectionState.ACTIVATED: "activated",
+                    NM.ActiveConnectionState.ACTIVATING: "activating",
+                    NM.ActiveConnectionState.DEACTIVATING: "deactivating",
+                    NM.ActiveConnectionState.DEACTIVATED: "deactivated",
+                }.get(
+                    self._device.get_active_connection().get_state(),
+                    "unknown",
+                )
+        except Exception:
+            pass
+        return "unknown"
 
     @Property(object, "readable")
     def access_points(self) -> List[object]:
@@ -146,11 +148,12 @@ class Wifi(Service):
         def make_ap_dict(ap: NM.AccessPoint):
             return {
                 "bssid": ap.get_bssid(),
-                # "address": ap.get_
                 "last_seen": ap.get_last_seen(),
-                "ssid": NM.utils_ssid_to_utf8(ap.get_ssid().get_data())
-                if ap.get_ssid()
-                else "Unknown",
+                "ssid": (
+                    NM.utils_ssid_to_utf8(ap.get_ssid().get_data())
+                    if ap.get_ssid()
+                    else "Unknown"
+                ),
                 "active-ap": self._ap,
                 "strength": ap.get_strength(),
                 "frequency": ap.get_frequency(),
@@ -175,14 +178,14 @@ class Wifi(Service):
         ssid = self._ap.get_ssid().get_data()
         return NM.utils_ssid_to_utf8(ssid) if ssid else "Unknown"
 
-    @Property(int, "readable")
+    @Property(str, "readable")
     def state(self):
         return {
             NM.DeviceState.UNMANAGED: "unmanaged",
             NM.DeviceState.UNAVAILABLE: "unavailable",
             NM.DeviceState.DISCONNECTED: "disconnected",
-            NM.DeviceState.PREPARE: "prepare",
-            NM.DeviceState.CONFIG: "config",
+            NM.DeviceState.PREPARE: "preparing",
+            NM.DeviceState.CONFIG: "configuring",
             NM.DeviceState.NEED_AUTH: "need_auth",
             NM.DeviceState.IP_CONFIG: "ip_config",
             NM.DeviceState.IP_CHECK: "ip_check",
@@ -202,40 +205,88 @@ class Ethernet(Service):
     @Signal
     def enabled(self) -> bool: ...
 
-    @Property(int, "readable")
-    def speed(self) -> int:
-        return self._device.get_speed()
-
-    @Property(str, "readable")
-    def internet(self) -> str:
-        return {
-            NM.ActiveConnectionState.ACTIVATED: "activated",
-            NM.ActiveConnectionState.ACTIVATING: "activating",
-            NM.ActiveConnectionState.DEACTIVATING: "deactivating",
-            NM.ActiveConnectionState.DEACTIVATED: "deactivated",
-        }.get(
-            self._device.get_active_connection().get_state(),
-            "disconnected",
-        )
-
     def __init__(self, client: NM.Client, device: NM.DeviceEthernet, **kwargs) -> None:
         super().__init__(**kwargs)
         self._client: NM.Client = client
         self._device: NM.DeviceEthernet = device
+        self._state_map = {
+            NM.DeviceState.UNKNOWN: "unknown",
+            NM.DeviceState.UNMANAGED: "unmanaged",
+            NM.DeviceState.UNAVAILABLE: "unavailable",
+            NM.DeviceState.DISCONNECTED: "disconnected",
+            NM.DeviceState.PREPARE: "preparing",
+            NM.DeviceState.CONFIG: "configuring",
+            NM.DeviceState.NEED_AUTH: "need-auth",
+            NM.DeviceState.IP_CONFIG: "ip-config",
+            NM.DeviceState.IP_CHECK: "ip-check",
+            NM.DeviceState.SECONDARIES: "secondaries",
+            NM.DeviceState.ACTIVATED: "activated",
+            NM.DeviceState.DEACTIVATING: "deactivating",
+            NM.DeviceState.FAILED: "failed",
+        }
 
         for pn in (
             "active-connection",
-            "internet",
+            "icon-name",
             "speed",
             "state",
         ):
             self._device.connect(f"notify::{pn}", lambda *_: self.notifier(pn))
 
-        self._device.connect("notify::speed", lambda *_: print(_))
-
     def notifier(self, pn):
         self.notify(pn)
         self.emit("changed")
+
+    @property
+    def state(self):
+        """Return the current state of the ethernet device."""
+        return self._state_map.get(self._device.get_state(), "unknown")
+
+    @property
+    def internet(self):
+        """Check if the ethernet device has internet connectivity."""
+        try:
+            if self._device.get_active_connection():
+                return {
+                    NM.ActiveConnectionState.ACTIVATED: "activated",
+                    NM.ActiveConnectionState.ACTIVATING: "activating",
+                    NM.ActiveConnectionState.DEACTIVATING: "deactivating",
+                    NM.ActiveConnectionState.DEACTIVATED: "deactivated",
+                }.get(
+                    self._device.get_active_connection().get_state(),
+                    "unknown",
+                )
+        except Exception:
+            pass
+        return "disconnected"
+
+    @Property(int, "readable")
+    def speed(self) -> int:
+        return self._device.get_speed()
+
+    @Property(str, "readable")
+    def active_interface(self):
+        if self._device.get_active_connection():
+            conn = self._device.get_active_connection().get_connection()
+            if conn:
+                s_conn = conn.get_setting_connection()
+                if s_conn:
+                    return s_conn.get_id()
+        return "Disconnected"
+
+    @Property(tuple[str, ...], "readable")
+    def interfaces(self):
+        return [
+            d.get_iface()
+            for d in self._client.get_devices()
+            if d.get_type_description() == "ethernet"
+        ]
+
+    def connect_to_interface(self, interface):
+        if interface not in self.interfaces:
+            raise ValueError(f"The interface {interface} does not seem to exist!")
+        res = exec_shell_command(f"nmcli device connect {interface}")
+        return res
 
 
 class NetworkClient(Service):
@@ -244,16 +295,52 @@ class NetworkClient(Service):
     @Signal
     def device_ready(self) -> None: ...
 
-    def __init__(self, **kwargs):
-        self._client: NM.Client | None = None
-        self.wifi_device: Wifi | None = None
-        self.ethernet_device: Ethernet | None = None
-        super().__init__(**kwargs)
-        NM.Client.new_async(
-            cancellable=None,
-            callback=self._init_network_client,
-            **kwargs,
-        )
+    @Signal
+    def ethernet_changed(self) -> None: ...
+
+    @Signal
+    def wifi_changed(self) -> None: ...
+
+    def __init__(self):
+        super().__init__()
+        self._client = None
+        self.ethernet_device = None
+        self.wifi_device = None
+
+        # Initialize NetworkManager client
+        try:
+            self._client = NM.Client.new(None)
+            self._init_devices()
+            self.emit("device-ready")
+        except Exception as e:
+            print(f"Failed to initialize NetworkManager client: {e}")
+
+    def _init_devices(self):
+        """Initialize network devices."""
+        if not self._client:
+            return
+
+        # Look for ethernet devices
+        for device in self._client.get_devices():
+            if device.get_device_type() == NM.DeviceType.ETHERNET:
+                self.ethernet_device = Ethernet(self._client, device)
+                # Connect state change signal
+                device.connect("state-changed", self._on_ethernet_state_changed)
+
+                # Also connect to property changes
+                if device.get_active_connection():
+                    device.get_active_connection().connect(
+                        "notify::state", lambda *args: self.emit("ethernet-changed")
+                    )
+                break
+
+        # Look for WiFi devices
+        for device in self._client.get_devices():
+            if device.get_device_type() == NM.DeviceType.WIFI:
+                self.wifi_device = Wifi(self._client, device)
+                # Connect state change signal
+                device.connect("state-changed", self._on_wifi_state_changed)
+                break
 
     def _init_network_client(self, client: NM.Client, task: Gio.Task, **kwargs):
         self._client = client
@@ -272,14 +359,135 @@ class NetworkClient(Service):
 
         self.notify("primary-device")
 
+    def _on_ethernet_state_changed(self, device, new_state, old_state, reason):
+        """Handle ethernet device state changes."""
+        if self.ethernet_device:
+            # Update the active connection watcher if needed
+            if device.get_active_connection():
+                device.get_active_connection().connect(
+                    "notify::state", lambda *args: self.emit("ethernet-changed")
+                )
+
+        # Emit the signal to notify listeners
+        self.emit("ethernet-changed")
+
+    def _on_wifi_state_changed(self, device, new_state, old_state, reason):
+        """Handle WiFi device state changes."""
+        self.emit("wifi-changed")
+
     def _get_device(self, device_type) -> Any:
         devices: List[NM.Device] = self._client.get_devices()  # type: ignore
-        return next(
-            (
-                x
-                for x in devices
-                if x.get_device_type() == device_type
-                and x.get_active_connection() is not None
-            ),
-            None,
+        for device in devices:
+            if device.get_device_type() == device_type:
+                return device
+        return None
+
+    def _get_primary_device(self) -> Literal["wifi", "wired"] | None:
+        if not self._client or not self._client.get_primary_connection():
+            return None
+
+        conn_type = self._client.get_primary_connection().get_connection_type()
+        if "wireless" in str(conn_type):
+            return "wifi"
+        elif "ethernet" in str(conn_type):
+            return "wired"
+        return None
+
+    def connect_wifi_bssid(self, bssid):
+        # We are using nmcli here, idk im lazy
+        exec_shell_command_async(
+            f"nmcli device wifi connect {bssid}", lambda *args: print(args)
         )
+
+    @Property(str, "readable")
+    def primary_device(self) -> Literal["wifi", "wired"] | None:
+        return self._get_primary_device()
+
+    def get_wired_connections(self):
+        """Get available wired connection profiles."""
+        if not self._client or not self.ethernet_device:
+            return []
+
+        connections = []
+        active_connection = None
+
+        if self.ethernet_device._device.get_active_connection():
+            active_connection = self.ethernet_device._device.get_active_connection()
+
+        # Get all connection profiles
+        for conn in self._client.get_connections():
+            # Filter for ethernet connections
+            s_conn = conn.get_setting_connection()
+            if not s_conn:
+                continue
+
+            if s_conn.get_connection_type() == "802-3-ethernet":
+                is_active = False
+                if active_connection and active_connection.get_connection() == conn:
+                    is_active = True
+
+                connections.append(
+                    {
+                        "uuid": s_conn.get_uuid(),
+                        "id": s_conn.get_id(),
+                        "name": s_conn.get_id(),
+                        "active": is_active,
+                    }
+                )
+
+        return connections
+
+    def activate_connection(self, uuid):
+        """Activate a connection by UUID."""
+        if not self._client:
+            return False
+
+        try:
+            # Find the connection by UUID
+            connection = None
+            for conn in self._client.get_connections():
+                s_conn = conn.get_setting_connection()
+                if s_conn and s_conn.get_uuid() == uuid:
+                    connection = conn
+                    break
+
+            if connection:
+                self._client.activate_connection_async(
+                    connection,
+                    None,
+                    None,
+                    None,  # No cancellable
+                    lambda client, result: self._on_connection_activated(
+                        client, result, uuid
+                    ),
+                )
+                return True
+        except Exception as e:
+            print(f"Failed to activate connection: {e}")
+
+        return False
+
+    def _on_connection_activated(self, client, result, uuid):
+        """Callback when a connection activation has completed."""
+        try:
+            active_conn = client.activate_connection_finish(result)
+            # Emit signal to update UI
+            self.emit("ethernet-changed")
+        except Exception as e:
+            print(f"Error activating connection {uuid}: {e}")
+
+    def toggle_wired(self):
+        """Toggle the ethernet connection."""
+        if self.ethernet_device:
+            device = self.ethernet_device._device
+            current_state = device.get_state()
+
+            if current_state == NM.DeviceState.ACTIVATED:
+                # Disable the device (disconnect)
+                device.disconnect(None)
+            else:
+                # Enable the device (connect to available connection)
+                connections = self.get_wired_connections()
+                if connections:
+                    # Connect to the first available connection
+                    self.activate_connection(connections[0]["uuid"])
