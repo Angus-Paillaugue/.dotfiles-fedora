@@ -7,18 +7,22 @@ from fabric import Application
 from modules.bar import Bar
 from modules.launcher import AppLauncher
 import services.config as config
+from modules.wallpaper import WallpaperManager
+from modules.clipboard import ClipboardManager
 
 if __name__ == "__main__":
     setproctitle.setproctitle(config.APP_NAME)
     bar = Bar()
     launcher = AppLauncher()
-    app = Application(config.APP_NAME, bar, launcher)
+    wallpaper_manager = WallpaperManager()
+    clipboard_manager = ClipboardManager()
+    app = Application(config.APP_NAME, bar, launcher, wallpaper_manager, clipboard_manager)
     def apply_stylesheet(*_):
         return app.set_stylesheet_from_file(get_relative_path("main.css"))
 
     # Load main stylesheet
     style_monitor = monitor_file(get_relative_path("main.css"))
     style_monitor.connect("changed", apply_stylesheet)
+    app.apply_stylesheet = apply_stylesheet
     apply_stylesheet()
     app.run()
-

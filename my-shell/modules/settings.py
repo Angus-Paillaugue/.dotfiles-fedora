@@ -37,14 +37,15 @@ class SettingsMenuDropdown(WaylandWindow):
         self.bluetooth_devices_dropdown_slot = Box()
         self.wifi_networks_dropdown_slot = Box()
         self.audio_outputs_dropdown_slot = Box()
+        self.mic_inputs_dropdown_slot = Box()
         self.wired_networks_dropdown_slot = Box()
-        self.mic_module = MicRow()
+        self.mic_module = MicRow(slot=self.mic_inputs_dropdown_slot)
         self.volume_module = VolumeRow(slot=self.audio_outputs_dropdown_slot)
         self.bluetooth = BluetoothButton(slot=self.bluetooth_devices_dropdown_slot)
         self.power_menu_button = PowerMenuButton(power_actions=self.power_menu_actions)
         self.wifi_module = WifiModule(slot=self.wifi_networks_dropdown_slot)
         self.network_module = Wired(slot=self.wired_networks_dropdown_slot)
-        self.screenshot_button = ScreenshotButton()
+        self.screenshot_button = ScreenshotButton(close_settings=self.toggle_visibility)
 
         self.buttons_grid = Gtk.Grid(
             column_homogeneous=True,
@@ -80,6 +81,7 @@ class SettingsMenuDropdown(WaylandWindow):
             self.volume_module,
             self.audio_outputs_dropdown_slot,
             self.mic_module,
+            self.mic_inputs_dropdown_slot,
             self.brightness_module,
         ]
 

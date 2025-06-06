@@ -2,6 +2,7 @@
 @import url("./styles/battery.css");
 @import url("./styles/brightness.css");
 @import url("./styles/colors.css");
+@import url("./styles/clipboard.css");
 @import url("./styles/language.css");
 @import url("./styles/launcher.css");
 @import url("./styles/metrics.css");
@@ -16,11 +17,12 @@
 @import url("./styles/wired.css");
 @import url("./styles/bluetooth.css");
 @import url("./styles/workspace.css");
+@import url("./styles/wallpaper.css");
 
 * {
   all: unset;
   color: var(--foreground);
   font-size: unset;
   font-family: 'JetBrains Mono', monospace;
-  border-radius: 16px;
+  border-radius: 12px;
 }

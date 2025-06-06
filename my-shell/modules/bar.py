@@ -16,6 +16,7 @@ from modules.time import Time
 from modules.settings import Settings
 from modules.metrics import Metrics
 from modules.tray import SystemTray
+import modules.icons as icons
 
 class Bar(Window):
     def __init__(self, **kwargs):
@@ -53,8 +54,9 @@ class Bar(Window):
         )
 
         self.lang_label = Label(name="lang-label")
+        self.lang_icon = Label(markup=icons.keyboard, name="keyboard-lang-icon")
         self.language = Button(
-            name="language", h_align="center", v_align="center", child=self.lang_label
+            name="language", h_align="center", v_align="center", child=Box(children=[self.lang_icon, self.lang_label], spacing=4)
         )
         self.on_language_switch()
         self.connection.connect("event::activelayout", self.on_language_switch)

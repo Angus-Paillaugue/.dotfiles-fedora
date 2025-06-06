@@ -51,7 +51,7 @@
 #power-option-button {
   border-radius: 8px;
   padding: 8px;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 #power-option-button:hover {
@@ -83,4 +83,58 @@
 
 #setting-buttons-grid {
   margin-top: 12px;
+}
+
+
+/* power-confirm.css */
+#power-confirm-dialog {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#power-confirm-box {
+  background-color: var(--surface);
+  border-radius: 12px;
+  min-width: 320px;
+  padding: 16px;
+}
+
+#confirm-icon {
+  font-size: 48px;
+  color: var(--primary);
+}
+
+#confirm-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#confirm-message {
+  color: var(--on-surface-variant);
+}
+
+#confirm-cancel-button {
+  background-color: var(--surface-bright);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+#confirm-cancel-button label {
+  color: var(--foreground);
+}
+#confirm-ok-button {
+  background-color: var(--primary);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+#confirm-ok-button label {
+  color: var(--on-primary);
+}
+
+#confirm-cancel-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--foreground);
+}
+
+#confirm-ok-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--foreground);
 }

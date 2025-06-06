@@ -86,9 +86,9 @@ class AppLauncher(WaylandWindow):
             children=[
                 self.search_entry,
                 Button(
-                    name="close-button",
-                    child=Label(name="close-label", markup=icons.cancel),
+                    child=Label(markup=icons.cancel),
                     on_clicked=lambda *_: self.close_launcher(),
+                    style_classes=["close-button"],
                 ),
             ],
         )

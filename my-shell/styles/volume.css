@@ -1,3 +1,4 @@
+
 #bt-outputs-open-button {
   background-color: var(--surface);
   padding: 4px;
@@ -39,3 +40,19 @@
 .bt-output-item:hover label {
   color: var(--on-foreground);
 }
+.bt-output-item.selected-output {
+  background-color: var(--primary);
+  padding-left: 12px;
+  border-radius: 8px;
+}
+
+.bt-output-item.selected-output label {
+  color: var(--on-primary);
+}
+
+#mic-inputs-container-box {
+  margin-top: 8px;
+  background-color: var(--surface);
+}
+
+/* We can reuse the bt-output-item class for microphone inputs as well */

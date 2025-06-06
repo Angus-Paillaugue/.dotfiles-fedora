@@ -4,7 +4,8 @@ font_weight: str = 'normal'
 
 span: str = f"<span font-family='{font_family}' font-weight='{font_weight}'>"
 
-settings: str = "&#xeb20;"
+settings: str = "&#xf1f6;"
+keyboard: str = "&#xebd6;"
 # Chevrons
 chevron_up: str = "&#xea62;"
 chevron_down: str = "&#xea5f;"
@@ -38,6 +39,7 @@ volume_low: str = "&#xeb4f;"
 volume_high: str = "&#xeb51;"
 mic: str = "&#xeaf0;"
 mic_muted: str = "&#xed16;"
+check: str = "&#xea5e;"
 # Battery
 battery_danger: str = "&#xff1d;"
 battery_0: str = "&#xea34;"
