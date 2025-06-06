@@ -139,15 +139,15 @@ class BluetoothDevicesDropdown(Revealer):
         self.client.notify("scanning")
         self.client.notify("enabled")
 
+    def collapse(self):
+        """Toggle the visibility of the Bluetooth devices dropdown."""
+        self.shown = False
+        self.set_reveal_child(self.shown)
+
     def toggle_visibility(self):
         """Toggle the visibility of the Bluetooth devices dropdown."""
-        if self.shown:
-            self.unreveal()
-        else:
-            self.reveal()
-            self.status_label()
-            self.update_scan_label()
         self.shown = not self.shown
+        self.set_reveal_child(self.shown)
 
     def status_label(self):
         if self.client.enabled:

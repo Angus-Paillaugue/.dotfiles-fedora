@@ -14,6 +14,7 @@ from modules.volume import VolumeRow, MicRow
 from modules.wifi import WifiModule
 from modules.wired import Wired
 from modules.screenshot import ScreenshotButton
+from modules.screen_record import ScreenRecordButton
 
 
 class SettingsMenuDropdown(WaylandWindow):
@@ -46,6 +47,7 @@ class SettingsMenuDropdown(WaylandWindow):
         self.wifi_module = WifiModule(slot=self.wifi_networks_dropdown_slot)
         self.network_module = Wired(slot=self.wired_networks_dropdown_slot)
         self.screenshot_button = ScreenshotButton(close_settings=self.toggle_visibility)
+        self.screen_record_button = ScreenRecordButton(close_settings=self.toggle_visibility)
 
         self.buttons_grid = Gtk.Grid(
             column_homogeneous=True,
@@ -61,7 +63,10 @@ class SettingsMenuDropdown(WaylandWindow):
         self.buttons_grid.attach(self.power_profile, 1, 1, 1, 1)
 
         self.end_children = Box(
-            children=[self.screenshot_button, self.power_menu_button],
+            children=[
+                self.screen_record_button, self.screenshot_button,
+                self.power_menu_button,
+            ],
             v_align="center",
             h_align="center",
             spacing=12,
@@ -122,11 +127,20 @@ class SettingsMenuDropdown(WaylandWindow):
     def toggle_visibility(self):
         if self.is_visible():
             self.hide()
+            self.collapse_slots()
         else:
             self.show_all()
             self.position_window()
             # Make sure our window has focus so we can detect focus out events
             self.present()
+
+    def collapse_slots(self):
+        """Collapse all of the Revealer used by modules"""
+        self.network_module.wired_networks_dropdown.collapse()
+        self.wifi_module.wifi_networks_dropdown.collapse()
+        self.bluetooth.bluetooth_devices_dropdown.collapse()
+        self.volume_module.outputs_box.collapse()
+        self.mic_module.inputs_box.collapse()
 
 
 class Settings(Box):
@@ -160,5 +174,5 @@ class Settings(Box):
         # Connect button to toggle dropdown
         self.settings_button.connect("clicked", self.toggle_dropdown)
 
-    def toggle_dropdown(self, button):
+    def toggle_dropdown(self, *_):
         self.dropdown.toggle_visibility()

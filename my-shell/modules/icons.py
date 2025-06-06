@@ -59,6 +59,12 @@ cancel: str = "&#xf640;"
 performance: str = "&#x10021;"
 eco: str = "&#xed4f;"
 balanced: str = "&#xebc2;"
+# Notification
+trash: str = "&#xeb41;"
+notifications_off: str = "&#xece9;"
+notifications_clear: str = "&#xf814;"
+# Screen record
+screen_record: str = "&#xfca8;"
 # Others
 screenshot: str = "&#xf201;"
 

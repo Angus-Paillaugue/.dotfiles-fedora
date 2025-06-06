@@ -127,9 +127,13 @@ class WiredNetworksDropdown(Revealer):
 
         self.network_client.connect("device-ready", self._on_device_ready)
 
+    def collapse(self):
+        self.shown = False
+        self.set_reveal_child(self.shown)
+
     def toggle_visibility(self):
         """Toggle the visibility of the wired networks dropdown."""
-        if self.network_client.ethernet_device._device.get_state() != NM.DeviceState.ACTIVATED:
+        if not self.network_client.ethernet_device or self.network_client.ethernet_device._device.get_state() != NM.DeviceState.ACTIVATED:
             return
         self.shown = not self.shown
         self.set_reveal_child(self.shown)
@@ -186,6 +190,10 @@ class WiredNetworksDropdown(Revealer):
                 self.wired_icon.set_markup(icons.ethernet_off)
                 self.wired_button.add_style_class("disabled")
                 self.wired_status_text.set_label(state.capitalize())
+        else:
+            self.wired_icon.set_markup(icons.ethernet_off)
+            self.wired_button.add_style_class("disabled")
+            self.wired_status_text.set_label("Unavailable")
 
     def toggle_wired(self, *args):
         """Enable or disable the wired connection"""
@@ -319,6 +327,8 @@ class Wired(Box):
         # Add a fallback timer to update state after a short delay
         GLib.timeout_add(500, self._check_initial_state)
 
+        self._update_connection_name()
+
         # Connect to connection changes
         if self.network_client._client:
             self.network_client._client.connect(
@@ -363,6 +373,9 @@ class Wired(Box):
     def _update_connection_name(self):
         """Update the connection name label directly"""
         if not self.network_client.ethernet_device:
+            self.wired_icon.set_markup(icons.ethernet_off)
+            self.left_button.add_style_class("disabled")
+            self.wired_status_text.set_label("Unavailable")
             return
 
         state = self.network_client.ethernet_device.state

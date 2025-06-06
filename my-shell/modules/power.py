@@ -174,7 +174,11 @@ class PowerMenuActions(Revealer):
         )
 
         self.actions = [
-            {"label": "Logout", "icon": icons.logout, "command": "logout"},
+            {
+                "label": "Logout",
+                "icon": icons.logout,
+                "command": "hyprctl dispatch exit",
+            },
             {"label": "Reboot", "icon": icons.reboot, "command": "systemctl reboot"},
             {
                 "label": "Shutdown",

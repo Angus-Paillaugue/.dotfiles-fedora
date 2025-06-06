@@ -9,6 +9,8 @@ from modules.launcher import AppLauncher
 import services.config as config
 from modules.wallpaper import WallpaperManager
 from modules.clipboard import ClipboardManager
+from modules.notification import NotificationPopup
+from modules.corners import Corners
 
 if __name__ == "__main__":
     setproctitle.setproctitle(config.APP_NAME)
@@ -16,7 +18,17 @@ if __name__ == "__main__":
     launcher = AppLauncher()
     wallpaper_manager = WallpaperManager()
     clipboard_manager = ClipboardManager()
-    app = Application(config.APP_NAME, bar, launcher, wallpaper_manager, clipboard_manager)
+    notification = NotificationPopup()
+    corners = Corners()
+    app = Application(
+        config.APP_NAME,
+        bar,
+        launcher,
+        wallpaper_manager,
+        clipboard_manager,
+        notification,
+        corners,
+    )
     def apply_stylesheet(*_):
         return app.set_stylesheet_from_file(get_relative_path("main.css"))
 

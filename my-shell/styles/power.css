@@ -1,5 +1,7 @@
 #power-options-container {
   margin-top: 12px;
+  background-color: var(--surface);
+  border-radius: 12px;
 }
 
 #power-menu-main-button {
@@ -44,10 +46,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-#power-options-container {
-  min-width: 180px;
-}
-
 #power-option-button {
   border-radius: 8px;
   padding: 8px;
@@ -55,6 +53,7 @@
 }
 
 #power-option-button:hover {
+  border-radius: 12px;
   background-color: var(--surface-bright);
 }
 

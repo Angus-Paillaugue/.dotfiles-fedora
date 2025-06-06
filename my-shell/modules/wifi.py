@@ -171,13 +171,16 @@ class WifiNetworksDropdown(Revealer):
 
         self.network_client.connect("device-ready", self._on_device_ready)
 
+    def collapse(self):
+        self.shown = False
+        self.set_reveal_child(self.shown)
+
     def toggle_visibility(self):
         """Toggle the visibility of the Wifi networks dropdown."""
         if not self.network_client._client.wireless_get_enabled():
             return
         self.shown = not self.shown
         self.set_reveal_child(self.shown)
-
 
         if self.shown:
             self._update_wifi_status_ui()

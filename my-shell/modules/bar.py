@@ -1,6 +1,5 @@
-import fabric
-from gi.repository import Gdk, Gtk
-from fabric.widgets.wayland import WaylandWindow as Window
+from gi.repository import Gtk
+from fabric.widgets.wayland import WaylandWindow
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
 from fabric.widgets.label import Label
@@ -18,18 +17,19 @@ from modules.metrics import Metrics
 from modules.tray import SystemTray
 import modules.icons as icons
 
-class Bar(Window):
+
+class Bar(WaylandWindow):
     def __init__(self, **kwargs):
         super().__init__(
+            name="bar",
             layer="top",
             anchor="left top right",
             exclusivity="auto",
             visible=True,
+            margin="4px 4px 0px 4px",
             all_visible=True,
             **kwargs
         )
-
-        self.set_margin("4px 4px 4px 4px")
         self.connection = get_hyprland_connection()
 
         self.workspaces = Workspaces(

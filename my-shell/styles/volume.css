@@ -1,26 +1,21 @@
 
-#bt-outputs-open-button {
+#mic-outputs-open-button, #volume-outputs-open-button {
   background-color: var(--surface);
   padding: 4px;
   transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border-radius: 8px;
 }
-#bt-outputs-open-button label{
+#mic-outputs-open-button label, #volume-outputs-open-button label{
   color: var(--foreground);
   font-size: 16px;
   transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-#bt-outputs-open-button:hover {
+#mic-outputs-open-button:hover, #volume-outputs-open-button:hover {
   background-color: var(--primary);
   border-radius: 20px;
 }
-
-#outputs-container-box {
-  margin-top: 8px;
-  background-color: var(--surface);
-}
-#bt-outputs-open-button:hover label {
+#mic-outputs-open-button:hover label, #volume-outputs-open-button:hover label {
   color: var(--on-primary);
 }
 .bt-output-item {
@@ -31,7 +26,7 @@
 .bt-output-item:hover {
   background-color: var(--on-secondary);
   padding-left: 12px;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 .bt-output-item label {
   color: var(--foreground);
@@ -50,9 +45,9 @@
   color: var(--on-primary);
 }
 
-#mic-inputs-container-box {
-  margin-top: 8px;
+#mic-inputs-container-box, #outputs-container-box {
   background-color: var(--surface);
 }
-
-/* We can reuse the bt-output-item class for microphone inputs as well */
+#outputs-container, #mic-inputs-container {
+  margin-top: 10px;
+}

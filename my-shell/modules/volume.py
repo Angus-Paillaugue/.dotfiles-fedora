@@ -119,7 +119,7 @@ class VolumeOutputsRevealer(Revealer):
             child=self.output_container,
             propagate_height=False,
             h_expand=True,
-            min_content_size=(-1, 150),
+            min_content_size=(-1, 160),
             propagate_width=True,  # Ensure width propagation
             h_align="fill",  # Fill available space
         )
@@ -128,11 +128,12 @@ class VolumeOutputsRevealer(Revealer):
         self.shown = False
 
     def toggle(self):
-        if self.shown:
-            self.unreveal()
-        else:
-            self.reveal()
         self.shown = not self.shown
+        self.set_reveal_child(self.shown)
+
+    def collapse(self):
+        self.shown = False
+        self.set_reveal_child(self.shown)
 
 
 class VolumeRow(Box):
@@ -149,7 +150,7 @@ class VolumeRow(Box):
         self.audio = Audio()
         self.outputs_box = VolumeOutputsRevealer()
         self.output_box_button = Button(
-            name="bt-outputs-open-button",
+            name="volume-outputs-open-button",
             child=Label(markup=icons.chevron_right),
             v_expand=True,
             h_align="center",
@@ -284,24 +285,24 @@ class VolumeRow(Box):
         is_current = self.audio.speaker and output == self.audio.speaker
 
         # Create children list conditionally to avoid None values
-        label_box_children = [Label(label=descriptive_name)]
-        if is_current:
-            label_box_children.append(Label(markup=icons.check))
+        check_icon = (
+            Label(markup=icons.check, h_expand=False)
+            if is_current
+            else Label(h_expand=False)
+        )
 
-        row = CenterBox(
-            start_children=[
-                Box(
-                    orientation="h",
-                    spacing=8,
+        row = Box(
+            children=[
+                Label(
+                    label=descriptive_name,
+                    ellipsization="end",
                     h_expand=True,
-                    h_align="fill",
-                    children=label_box_children,
-                )
+                    h_align="start",
+                ),
+                check_icon,
             ],
-            end_children=[],  # Empty list instead of None
             h_expand=True,
             h_align="fill",
-            v_align="center",
             orientation="h",
         )
 
@@ -448,6 +449,7 @@ class MicInputsRevealer(Revealer):
             child=self.input_container,
             propagate_height=False,
             h_expand=True,
+            h_scrollbar_policy="never",
             min_content_size=(-1, 150),
             propagate_width=True,
             h_align="fill",
@@ -456,12 +458,13 @@ class MicInputsRevealer(Revealer):
 
         self.shown = False
 
+    def collapse(self):
+        self.shown = False
+        self.set_reveal_child(self.shown)
+
     def toggle(self):
-        if self.shown:
-            self.unreveal()
-        else:
-            self.reveal()
         self.shown = not self.shown
+        self.set_reveal_child(self.shown)
 
 
 class MicRow(Box):
@@ -479,7 +482,7 @@ class MicRow(Box):
         self.audio = Audio()
         self.inputs_box = MicInputsRevealer()
         self.input_box_button = Button(
-            name="bt-outputs-open-button",
+            name="mic-outputs-open-button",
             child=Label(markup=icons.chevron_right),
             v_expand=True,
             h_align="center",
@@ -503,7 +506,6 @@ class MicRow(Box):
 
         # Initialize microphone inputs
         GLib.timeout_add(500, self.notify_inputs)
-
 
     def on_new_microphone(self, *args):
         if self.audio.microphone:
@@ -641,26 +643,24 @@ class MicRow(Box):
 
         # Visual indicator for current input
         is_current = self.audio.microphone and input_src == self.audio.microphone
+        check_icon = (
+            Label(markup=icons.check, h_expand=False)
+            if is_current
+            else Label(h_expand=False)
+        )
 
-        # Create children list
-        label_box_children = [Label(label=descriptive_name)]
-        if is_current:
-            label_box_children.append(Label(markup=icons.check))
-
-        row = CenterBox(
-            start_children=[
-                Box(
-                    orientation="h",
-                    spacing=8,
+        row = Box(
+            children=[
+                Label(
+                    label=descriptive_name,
+                    ellipsization="end",
                     h_expand=True,
-                    h_align="fill",
-                    children=label_box_children,
-                )
+                    h_align="start",
+                ),
+                check_icon,
             ],
-            end_children=[],
             h_expand=True,
             h_align="fill",
-            v_align="center",
             orientation="h",
         )
 
