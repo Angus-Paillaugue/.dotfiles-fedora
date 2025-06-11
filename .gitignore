@@ -37,3 +37,7 @@ obsidian
 Ax-Shell
 __pycache__
 .venv
+totem
+dleyna-server-service.conf
+my-shell
+pypoetry
